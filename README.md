@@ -1,1 +1,1 @@
-Personal Webiste for Acoustic Typer, written in Svelte 5. 
+Personal Webiste for Melodic Typer, written in Svelte 5. 
