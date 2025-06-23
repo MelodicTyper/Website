@@ -48,6 +48,9 @@
         <h2>I'm an obessively curious creator who likes computers!</h2>
     </div>
 </section>
+<section>
+    Some
+</section>
 
 <style>
     div.center {
@@ -74,7 +77,8 @@
         align-items: center;
         width: clamp(350px, 35vw, 1000px);
     }
-    @media (max-width: 1500px) {
+    
+    @media (max-width: 1123px) {
         div > h2 {
             font-size: 2.2rem;
         }
