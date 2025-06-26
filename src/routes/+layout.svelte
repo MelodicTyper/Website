@@ -1,6 +1,5 @@
 <script>
     import Sidebar from "$lib/components/Sidebar.svelte";
-    import { innerWidth } from 'svelte/reactivity/window';
 
     let { children } = $props();
     

@@ -1,5 +1,6 @@
 <script>
     import Header from "$lib/components/Header.svelte";
+    import Logo from "$lib/components/Logo.svelte"
     import { gsap, ScrollTrigger } from "$lib/scripts/gsap.js";
     /*
     $effect(() => {
@@ -44,7 +45,7 @@
 
 <section>
     <div class="center">
-        <img src="/icons/MelodicTyper.svg" alt="Musical Typewriter" />
+        <Logo></Logo>
         <h2>I'm an obessively curious creator who likes computers!</h2>
     </div>
 </section>
@@ -62,10 +63,7 @@
         justify-content: center;
     }
 
-    div > img {
-        display: block;
-        width: clamp(150px, 50%, 500px);
-    }
+    
     div > h2 {
         text-align: center;
         font-family: Viga, sans-serif;
@@ -78,7 +76,7 @@
         width: clamp(350px, 35vw, 1000px);
     }
     
-    @media (max-width: 1123px) {
+    @media (max-width: 1600px) {
         div > h2 {
             font-size: 2.2rem;
         }

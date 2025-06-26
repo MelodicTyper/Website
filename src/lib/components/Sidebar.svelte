@@ -1,21 +1,13 @@
 <script>
     import { innerWidth } from "svelte/reactivity/window";
     import { fade, scale } from "svelte/transition";
-
+    
     let isMobile = $state(false);
-    let activeItem = -1;
-    let tooltips = [
-        "Music",
-        "Explore",
-        "Learn",
-        "Others",
-        "Docs",
-        "Inspiration",
-        "Code",
-    ];
+    let activeItem = $state(-1);
 
+    $inspect(activeItem)
     $effect(() => {
-        isMobile = innerWidth.current && innerWidth.current <= 768;
+        isMobile = innerWidth.current && innerWidth.current <= 992;
     });
     
     let opacity = $state(0);
@@ -23,15 +15,17 @@
       opacity = 1;
     })
 
-    function handleClick(index) {
+    function handleClick(id) {
+       console.log("hi")
         if (isMobile) {
-            activeItem = activeItem === index ? -1 : index;
+            activeItem = id;
+            console.log("h")
         }
     }
 
-    function handleMouseEnter(index) {
+    function handleMouseEnter(id) {
         if (!isMobile) {
-            activeItem = index;
+            activeItem = id;
         }
     }
 
@@ -42,32 +36,43 @@
     }
 </script>
 
-<div class="sidebar" style:opacity={opacity} class:mobile={isMobile}>
-    <div class="content">
-        <ul>
-            {#each "MELODIC" as letter, i}
-                <li
-                    on:mouseenter={() => handleMouseEnter(i)}
-                    on:mouseleave={handleMouseLeave}
-                    on:click={() => handleClick(i)}
+{#snippet item(id, imgSrc, tooltip)}
+    <li>
+        <button
+            aria-label=tooltip
+            onmouseenter={() => handleMouseEnter(id)}
+            onmouseleave={handleMouseLeave}
+            onclick={() => handleClick(id)}>
+        
+        <span class="icon" class:active={activeItem === id}>
+            <img src={"/icons/" + imgSrc} alt=tooltip/>
+        </span>
+        </button>
+        {#if activeItem === id}
+            <div
+                class="tooltip"
+                class:mobile={isMobile}
+                transition:fade={{ duration: 200 }}
+            >
+                <span
+                    transition:scale={{ duration: 150, start: 0.8 }}
+                    >{tooltip}</span
                 >
-                    <span class:active={activeItem === i}>{letter}</span>
-                    {#if activeItem === i}
-                        <div
-                            class="tooltip"
-                            class:mobile={isMobile}
-                            transition:fade={{ duration: 200 }}
-                        >
-                            <span
-                                transition:scale={{ duration: 150, start: 0.8 }}
-                                >{tooltips[i]}</span
-                            >
-                        </div>
-                    {/if}
-                </li>
-            {/each}
+            </div>
+        {/if}
+    </li>
+{/snippet}
+
+
+<div class="sidebar" style:opacity={opacity} class:mobile={isMobile}>
+    <menu class="content">
+        <ul>
+            {@render item(1, "home.svg", "Home")}
+            {@render item(2, "blog.svg", "Blog")}
+            {@render item(3, "projects.svg", "Projects")}
+            {@render item(4, "contact.svg", "Contact")}
         </ul>
-    </div>
+    </menu>
 </div>
 
 <style>
@@ -88,9 +93,6 @@
         
     }
     
-    
-    
-
     .sidebar.mobile {
         transition: all 0.3s ease;
         transition: opacity 0.5s ease-out;
@@ -135,8 +137,8 @@
         display: flex;
         justify-content: center;
         align-items: center;
-        width: 35px;
-        height: 35px;
+        width: 45px;
+        height: 45px;
         border-radius: 50%;
         background-color: var(--color-green-main);
         color: white;
@@ -148,13 +150,21 @@
         position: relative;
         z-index: 1;
     }
+    
+    .sidebar.mobile .icon {
+        width: 35px;
+        height: 35px;
+    }
 
     span:hover,
     span.active {
         background-color: var(--color-green-secondary);
-        color: #222831;
         transform: scale(1.1);
         box-shadow: 0 0 8px rgba(102, 151, 111, 0.6);
+    }
+    
+    span:hover img,span.active img {
+        filter:invert(0.75);
     }
 
     .tooltip {
